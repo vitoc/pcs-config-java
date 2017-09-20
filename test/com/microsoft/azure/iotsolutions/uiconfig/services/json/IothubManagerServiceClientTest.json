@@ -1,0 +1,44 @@
+{
+  "items": [
+    {
+      "Properties": {
+        "Reported": {
+          "device1a": "a",
+          "device1b": {
+            "b": "b"
+          },
+          "c": "c"
+        }
+      },
+      "Tags": {
+        "device1e": "e",
+        "device1f": {
+          "f": "f"
+        },
+        "g": "g"
+      }
+    },
+    {
+      "Properties": {
+        "Reported": {
+          "device2a": "a",
+          "device2b": {
+            "b": "b"
+          },
+          "c": "c"
+        }
+      },
+      "Tags": {
+        "device2e": "e",
+        "device2f": {
+          "f": "f"
+        },
+        "g": "g"
+      }
+    }
+  ],
+  "$metadata": {
+    "$type": "DeviceList;1",
+    "$uri": "/v1/devices"
+  }
+}
