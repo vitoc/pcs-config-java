@@ -9,6 +9,7 @@ import com.microsoft.azure.iotsolutions.uiconfig.services.exceptions.*;
 import com.microsoft.azure.iotsolutions.uiconfig.services.models.LogoServiceModel;
 import play.libs.Json;
 import play.mvc.Controller;
+import play.mvc.Http;
 import play.mvc.Result;
 
 import java.util.Base64;
@@ -47,9 +48,10 @@ public final class SolutionSettingsController extends Controller {
         LogoServiceModel model = new LogoServiceModel();
         model.setType(request().contentType().orElse("application/octet-stream"));
         model.setImage(Base64.getEncoder().encodeToString(bytes));
+        Http.Response res = response();
         return storage.setLogoAsync(model)
             .thenApply(result -> {
-                response().setHeader(CONTENT_TYPE, model.getType());
+                res.setHeader(CONTENT_TYPE, model.getType());
                 return ok(setImageResponse(result));
             });
     }
