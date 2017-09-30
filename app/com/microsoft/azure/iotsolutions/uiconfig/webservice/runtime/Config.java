@@ -24,6 +24,7 @@ public class Config implements IConfig {
     private final String CACHE_TTL = APPLICATION_KEY + "cache_TTL";
     private final String REBUILD_TIMEOUT = APPLICATION_KEY + "rebuild_timeout";
     private final String SEED_TEMPLATEKEY = APPLICATION_KEY + "seed-template";
+    private final String BINGMAP_KEY = APPLICATION_KEY + "bingmap-key";
 
     private final String CLIENT_AUTH_KEY = APPLICATION_KEY + "client-auth.";
     private final String AUTH_REQUIRED_KEY = CLIENT_AUTH_KEY + "auth_required";
@@ -53,7 +54,8 @@ public class Config implements IConfig {
                 this.data.getString(IOTHUBMANAGER_WEBSERVICE_URL),
                 this.data.getInt(CACHE_TTL),
                 this.data.getInt(REBUILD_TIMEOUT),
-                this.data.getString(SEED_TEMPLATEKEY));
+                this.data.getString(SEED_TEMPLATEKEY),
+                this.data.getString(BINGMAP_KEY));
         return servicesConfig;
     }
 
@@ -65,8 +67,8 @@ public class Config implements IConfig {
 
         // Default to True unless explicitly disabled
         Boolean authRequired = !data.hasPath(AUTH_REQUIRED_KEY)
-            || data.getString(AUTH_REQUIRED_KEY).isEmpty()
-            || data.getBoolean(AUTH_REQUIRED_KEY);
+                || data.getString(AUTH_REQUIRED_KEY).isEmpty()
+                || data.getBoolean(AUTH_REQUIRED_KEY);
 
         // Default to JWT
         String authType = "JWT";
@@ -82,8 +84,8 @@ public class Config implements IConfig {
         if (data.hasPath(JWT_ALGOS_KEY)) {
             jwtAllowedAlgos.clear();
             Collections.addAll(
-                jwtAllowedAlgos,
-                data.getString(JWT_ALGOS_KEY).split(","));
+                    jwtAllowedAlgos,
+                    data.getString(JWT_ALGOS_KEY).split(","));
         }
 
         // Default to empty, no issuer
@@ -105,7 +107,7 @@ public class Config implements IConfig {
         }
 
         this.clientAuthConfig = new ClientAuthConfig(
-            authRequired, authType, jwtAllowedAlgos, jwtIssuer, jwtAudience, jwtClockSkew);
+                authRequired, authType, jwtAllowedAlgos, jwtIssuer, jwtAudience, jwtClockSkew);
 
         return this.clientAuthConfig;
     }
