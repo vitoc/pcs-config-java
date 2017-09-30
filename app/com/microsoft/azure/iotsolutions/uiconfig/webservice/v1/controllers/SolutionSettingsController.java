@@ -2,6 +2,7 @@
 
 package com.microsoft.azure.iotsolutions.uiconfig.webservice.v1.controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.microsoft.azure.iotsolutions.uiconfig.services.IStorage;
@@ -32,7 +33,11 @@ public final class SolutionSettingsController extends Controller {
     }
 
     public CompletionStage<Result> setThemeAsync() throws BaseException {
-        Object theme = Json.fromJson(request().body().asJson(), Object.class);
+        Object theme = new Object();
+        JsonNode node = request().body().asJson();
+        if (node != null) {
+            theme = Json.fromJson(request().body().asJson(), Object.class);
+        }
         return storage.setThemeAsync(theme)
                 .thenApply(result -> ok(toJson(result)));
     }

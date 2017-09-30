@@ -46,11 +46,13 @@ public class Storage implements IStorage {
 
     @Override
     public CompletionStage<Object> getThemeAsync() {
-        String data = "";
+        String data = toJson(Theme.Default);
         try {
-            data = client.getAsync(SolutionCollectionId, ThemeKey).toCompletableFuture().get().getData();
+            String serverData = client.getAsync(SolutionCollectionId, ThemeKey).toCompletableFuture().get().getData();
+            if (serverData != null && serverData.trim() != "") {
+                data = client.getAsync(SolutionCollectionId, ThemeKey).toCompletableFuture().get().getData();
+            }
         } catch (Exception ex) {
-            data = toJson(Theme.Default);
         }
         ObjectNode themeOut = (ObjectNode) Json.parse(data);
         appendBingMapKey(themeOut);
@@ -59,9 +61,19 @@ public class Storage implements IStorage {
 
     @Override
     public CompletionStage<Object> setThemeAsync(Object themeIn) throws BaseException {
-        String value = toJson(themeIn);
+
+        String value = "";
+        try {
+            value = toJson(themeIn);
+        } catch (Exception e) {
+        }
+
         return client.updateAsync(SolutionCollectionId, ThemeKey, value, "*").thenApplyAsync(m -> {
-                    ObjectNode themeOut = (ObjectNode) Json.parse(m.getData());
+                    String data = "{}";
+                    if (m.getData() != null && m.getData().trim() != "") {
+                        data = m.getData();
+                    }
+                    ObjectNode themeOut = (ObjectNode) Json.parse(data);
                     appendBingMapKey(themeOut);
                     return fromJson(themeOut.toString(), Object.class);
                 }
